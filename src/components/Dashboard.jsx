@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useMemo } from "react";
-import Card from "RSV/components/card";
+import Card from "RSV/components/Card";
 import Header from "RSV/components/Header";
 import TransactionItem from "./TransactionItem";
 import { formatCurrency } from "./constants";
