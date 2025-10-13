@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CATEGORY_ICONS } from "./constants";
+import { CATEGORY_ICONS, MenuIcon } from "./constants";
 
 export default function TransactionItem({ transaction, onEdit, onDelete }) {
 	const { name, category, date, amount, type, tags, account } = transaction;
