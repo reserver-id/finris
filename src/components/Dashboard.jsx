@@ -54,7 +54,7 @@ export default function Dashboard({ transactions, accounts }) {
 
 	return (
 		<div className="animate-fade-in">
-			<Header title={`Selamat Datang`} />
+			<Header title={`finRIS`} />
 			<div className="p-4 space-y-6">
 				<Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
 					<div className="flex justify-between items-center">
