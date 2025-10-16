@@ -2,6 +2,7 @@ import Link from "next/link";
 import Card from "./Card";
 import Header from "./Header";
 import { WalletIcon } from "./constants";
+import { SignOutButton } from "@clerk/nextjs";
 
 export default function Settings() {
 	const settingsOptions = [
@@ -90,27 +91,6 @@ export default function Settings() {
 			),
 			path: "/settings/help",
 		},
-		{
-			name: "Keluar",
-			icon: (
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-				>
-					<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-					<polyline points="16 17 21 12 16 7"></polyline>
-					<line x1="21" y1="12" x2="9" y2="12"></line>
-				</svg>
-			),
-			path: "/logout",
-		},
 	];
 
 	return (
@@ -150,6 +130,54 @@ export default function Settings() {
 								</Link>
 							</li>
 						))}
+
+						<SignOutButton>
+							<li>
+								<div className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors duration-200">
+									<div className="flex items-center">
+										<div className="text-slate-500 mr-4">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="24"
+												height="24"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												strokeWidth="2"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											>
+												<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+												<polyline points="16 17 21 12 16 7"></polyline>
+												<line
+													x1="21"
+													y1="12"
+													x2="9"
+													y2="12"
+												></line>
+											</svg>
+										</div>
+										<span className="text-slate-700">
+											Keluar
+										</span>
+									</div>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										className="text-slate-400"
+									>
+										<polyline points="9 18 15 12 9 6"></polyline>
+									</svg>
+								</div>
+							</li>
+						</SignOutButton>
 					</ul>
 				</Card>
 			</div>
