@@ -2,6 +2,15 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import BottomNavbar from "RSV/components/BottomNavbar";
 
+import {
+	ClerkProvider,
+	SignInButton,
+	SignUpButton,
+	SignedIn,
+	SignedOut,
+	UserButton,
+} from "@clerk/nextjs";
+
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],
@@ -19,19 +28,23 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 	return (
-		<html lang="en">
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-600`}
-			>
-				<div className="h-screen w-screen bg-white font-sans text-slate-800 flex flex-col max-w-md mx-auto shadow-2xl">
-					<main className="flex-1 overflow-y-auto pb-20">
-						{children}
-					</main>
-					<div>
-						<BottomNavbar />
+		<ClerkProvider>
+			<html lang="en">
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-600`}
+				>
+					<div className="h-screen w-screen bg-white font-sans text-slate-800 flex flex-col max-w-md mx-auto shadow-2xl">
+						<main className="flex-1 overflow-y-auto pb-20">
+							{children}
+						</main>
+						<SignedIn>
+							<div>
+								<BottomNavbar />
+							</div>
+						</SignedIn>
 					</div>
-				</div>
-			</body>
-		</html>
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }
