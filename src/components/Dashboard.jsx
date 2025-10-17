@@ -5,7 +5,7 @@ import Header from "RSV/components/Header";
 import TransactionItem from "./TransactionItem";
 import { formatCurrency } from "./constants";
 
-export default function Dashboard({ transactions, accounts }) {
+export default function Dashboard({ transactions, accounts, profile }) {
 	const { totalBalance, totalIncome, totalExpenses } = useMemo(() => {
 		let income = 0;
 		let expenses = 0;
@@ -54,7 +54,7 @@ export default function Dashboard({ transactions, accounts }) {
 
 	return (
 		<div className="animate-fade-in">
-			<Header title={`finRIS`} />
+			<Header title={`finRIS - ${profile?.name}`} />
 			<div className="p-4 space-y-6">
 				<Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg">
 					<div className="flex justify-between items-center">
