@@ -16,7 +16,10 @@ export default function Home() {
 		if (isSignedIn) {
 			fetch("/api/sync-user", { method: "POST" })
 				.then((res) => res.json())
-				.then((data) => setProfile(data));
+				.then((data) => {
+					setProfile(data);
+					console.log(data);
+				});
 		}
 	}, [isSignedIn]);
 

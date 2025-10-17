@@ -14,7 +14,7 @@ export async function POST() {
 	// cek di Supabase
 	const { data: existing } = await supabase
 		.from("users")
-		.select("*")
+		.select("*, accounts(*), transactions(*)")
 		.eq("email", email)
 		.single();
 
