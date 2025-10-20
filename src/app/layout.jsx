@@ -1,15 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import BottomNavbar from "RSV/components/BottomNavbar";
 
-import {
-	ClerkProvider,
-	SignInButton,
-	SignUpButton,
-	SignedIn,
-	SignedOut,
-	UserButton,
-} from "@clerk/nextjs";
+import { SignedIn } from "@clerk/nextjs";
+import Providers from "RSV/components/Providers";
+
+import "./globals.css";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -28,23 +23,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 	return (
-		<ClerkProvider>
-			<html lang="en">
-				<body
-					className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-600`}
-				>
+		<html lang="en">
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-600`}
+			>
+				<Providers>
 					<div className="h-screen w-screen bg-white font-sans text-slate-800 flex flex-col max-w-md mx-auto shadow-2xl">
 						<main className="flex-1 overflow-y-auto pb-20">
 							{children}
 						</main>
 						<SignedIn>
-							<div>
-								<BottomNavbar />
-							</div>
+							<BottomNavbar />
 						</SignedIn>
 					</div>
-				</body>
-			</html>
-		</ClerkProvider>
+				</Providers>
+			</body>
+		</html>
 	);
 }
