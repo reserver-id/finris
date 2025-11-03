@@ -1,4 +1,6 @@
+"use client";
 import { useState } from "react";
+import { Dialog } from "@headlessui/react";
 
 export default function AddAccountSheet({
 	onClose,
@@ -33,73 +35,87 @@ export default function AddAccountSheet({
 	const labelStyle = "block text-sm font-medium text-slate-600 mb-1";
 
 	return (
-		<>
+		<Dialog open={true} onClose={onClose} className="relative z-30">
+			{/* Overlay */}
 			<div
 				className="fixed inset-0 bg-black/40 z-20"
-				onClick={onClose}
-			></div>
-			<div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white p-4 rounded-t-2xl shadow-2xl z-30 animate-slide-up">
-				<div className="flex justify-between items-center mb-4">
-					<h2 className="text-xl font-bold text-slate-800">
-						{isEditing ? "Ubah Akun" : "Tambah Akun Baru"}
-					</h2>
-					<button
-						onClick={onClose}
-						className="text-slate-500 hover:text-slate-800"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
+				aria-hidden="true"
+			/>
+
+			{/* Bottom sheet container */}
+			<div className="fixed inset-0 flex items-end justify-center z-30">
+				<Dialog.Panel className="w-full max-w-md bg-white p-4 rounded-t-2xl shadow-2xl animate-slide-up">
+					<div className="flex justify-between items-center mb-4">
+						<Dialog.Title className="text-xl font-bold text-slate-800">
+							{isEditing ? "Ubah Akun" : "Tambah Akun Baru"}
+						</Dialog.Title>
+						<button
+							onClick={onClose}
+							className="text-slate-500 hover:text-slate-800"
 						>
-							<line x1="18" y1="6" x2="6" y2="18"></line>
-							<line x1="6" y1="6" x2="18" y2="18"></line>
-						</svg>
-					</button>
-				</div>
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div>
-						<label htmlFor="account-name" className={labelStyle}>
-							Nama Akun
-						</label>
-						<input
-							id="account-name"
-							type="text"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-							placeholder="cth., Bank BRI, Dompet Digital"
-							className={inputStyle}
-							required
-						/>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<line x1="18" y1="6" x2="6" y2="18"></line>
+								<line x1="6" y1="6" x2="18" y2="18"></line>
+							</svg>
+						</button>
 					</div>
-					<div>
-						<label htmlFor="initial-balance" className={labelStyle}>
-							Saldo Awal
-						</label>
-						<input
-							id="initial-balance"
-							type="number"
-							value={initialBalance}
-							onChange={(e) => setInitialBalance(e.target.value)}
-							placeholder="0"
-							className={`${inputStyle} font-mono`}
-							required
-						/>
-					</div>
-					<button
-						type="submit"
-						className="w-full p-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition-colors"
-					>
-						{isEditing ? "Simpan Perubahan" : "Simpan Akun"}
-					</button>
-				</form>
+
+					<form onSubmit={handleSubmit} className="space-y-4">
+						<div>
+							<label
+								htmlFor="account-name"
+								className={labelStyle}
+							>
+								Nama Akun
+							</label>
+							<input
+								id="account-name"
+								type="text"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								placeholder="cth., Bank BRI, Dompet Digital"
+								className={inputStyle}
+								required
+							/>
+						</div>
+						<div>
+							<label
+								htmlFor="initial-balance"
+								className={labelStyle}
+							>
+								Saldo Awal
+							</label>
+							<input
+								id="initial-balance"
+								type="number"
+								value={initialBalance}
+								onChange={(e) =>
+									setInitialBalance(e.target.value)
+								}
+								placeholder="0"
+								className={`${inputStyle} font-mono`}
+								required
+							/>
+						</div>
+						<button
+							type="submit"
+							className="w-full p-4 bg-orange-500 text-white font-bold rounded-lg hover:bg-orange-600 transition-colors"
+						>
+							{isEditing ? "Simpan Perubahan" : "Simpan Akun"}
+						</button>
+					</form>
+				</Dialog.Panel>
 			</div>
-		</>
+		</Dialog>
 	);
 }

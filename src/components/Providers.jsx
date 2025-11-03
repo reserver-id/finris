@@ -6,7 +6,17 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { useState } from "react";
 
 export default function Providers({ children }) {
-	const [client] = useState(() => new QueryClient());
+	const [client] = useState(
+		() =>
+			new QueryClient({
+				defaultOptions: {
+					queries: {
+						staleTime: 1000 * 60 * 5, // cache 5 menit
+						refetchOnWindowFocus: false,
+					},
+				},
+			})
+	);
 	return (
 		<QueryClientProvider client={client}>
 			<ClerkProvider>

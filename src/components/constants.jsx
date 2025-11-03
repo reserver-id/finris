@@ -152,8 +152,8 @@ export const MenuIcon = (props) => (
 );
 
 export const MOCK_ACCOUNTS = [
-	{ id: "acc1", name: "Bank BCA", initialBalance: 15000000 },
-	{ id: "acc2", name: "Kas", initialBalance: 750000 },
+	{ id: "acc1", name: "Bank BCA", balance: 15000000 },
+	{ id: "acc2", name: "Kas", balance: 750000 },
 ];
 
 export const MOCK_TRANSACTIONS = [
@@ -296,7 +296,7 @@ export const formatCurrency = (value) =>
 	}).format(value);
 
 export const CATEGORY_ICONS = {
-	MAKANAN: (
+	Makan: (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
@@ -383,7 +383,7 @@ export const CATEGORY_ICONS = {
 			<polyline points="17 2 12 7 7 2" />
 		</svg>
 	),
-	GAJI: (
+	Gaji: (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"

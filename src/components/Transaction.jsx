@@ -9,7 +9,9 @@ export default function Transaction({ transactions }) {
 
 	const filteredTransactions = useMemo(() => {
 		let results = [...transactions].sort(
-			(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+			(a, b) =>
+				new Date(b.transaction_date).getTime() -
+				new Date(a.transaction_date).getTime()
 		);
 
 		return results;

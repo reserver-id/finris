@@ -5,7 +5,7 @@ import Header from "RSV/components/Header";
 import TransactionItem from "./TransactionItem";
 import { formatCurrency } from "./constants";
 
-export default function Dashboard({ transactions, accounts, profile }) {
+export default function Dashboard({ transactions, accounts }) {
 	const { totalBalance, totalIncome, totalExpenses } = useMemo(() => {
 		let income = 0;
 		let expenses = 0;
@@ -19,10 +19,10 @@ export default function Dashboard({ transactions, accounts, profile }) {
 		});
 
 		const initialTotal = accounts.reduce(
-			(sum, acc) => sum + acc.initialBalance,
+			(sum, acc) => sum + acc.balance,
 			0
 		);
-		const balance = initialTotal + income - expenses;
+		const balance = initialTotal;
 
 		return {
 			totalBalance: balance,
@@ -32,24 +32,15 @@ export default function Dashboard({ transactions, accounts, profile }) {
 	}, [transactions, accounts]);
 
 	const accountsWithBalance = useMemo(() => {
-		return accounts
-			.map((account) => {
-				const balance =
-					account.initialBalance +
-					transactions
-						.filter((t) => t.account === account.name)
-						.reduce((acc, t) => {
-							return t.type === "INCOME"
-								? acc + t.amount
-								: acc - t.amount;
-						}, 0);
-				return { ...account, currentBalance: balance };
-			})
-			.sort((a, b) => b.currentBalance - a.currentBalance);
+		return accounts.sort((a, b) => b.balance - a.balance);
 	}, [accounts, transactions]);
 
 	const recentTransactions = [...transactions]
-		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+		.sort(
+			(a, b) =>
+				new Date(b.transaction_date).getTime() -
+				new Date(a.transaction_date).getTime()
+		)
 		.slice(0, 5);
 
 	return (
@@ -117,7 +108,7 @@ export default function Dashboard({ transactions, accounts, profile }) {
 							>
 								<p className="text-slate-600">{account.name}</p>
 								<p className="font-mono font-semibold text-slate-800">
-									{formatCurrency(account.currentBalance)}
+									{formatCurrency(account.balance)}
 								</p>
 							</div>
 						))}

@@ -1,8 +1,17 @@
+"use client";
+
 import { useState } from "react";
 import { CATEGORY_ICONS, MenuIcon } from "./constants";
 
 export default function TransactionItem({ transaction, onEdit, onDelete }) {
-	const { name, category, date, amount, type, tags, account } = transaction;
+	const {
+		description: name,
+		transaction_date: date,
+		amount,
+		type,
+		account,
+		category,
+	} = transaction;
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const formattedAmount = new Intl.NumberFormat("id-ID", {
@@ -20,7 +29,7 @@ export default function TransactionItem({ transaction, onEdit, onDelete }) {
 	return (
 		<div className="flex items-start p-3 hover:bg-slate-50 rounded-lg transition-colors duration-200">
 			<div className="flex-shrink-0 h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 mt-1">
-				{CATEGORY_ICONS[category]}
+				{CATEGORY_ICONS[category.name]}
 			</div>
 			<div className="ml-4 flex-grow">
 				<p className="font-semibold text-slate-700">{name}</p>
@@ -31,7 +40,7 @@ export default function TransactionItem({ transaction, onEdit, onDelete }) {
 						year: "numeric",
 					})}
 				</p>
-				{tags && tags.length > 0 && (
+				{/* {tags && tags.length > 0 && (
 					<div className="flex flex-wrap gap-1 mt-1">
 						{tags.map((tag) => (
 							<span
@@ -42,15 +51,18 @@ export default function TransactionItem({ transaction, onEdit, onDelete }) {
 							</span>
 						))}
 					</div>
-				)}
+				)} */}
 			</div>
 			<div className="text-right flex-shrink-0 ml-2">
 				<p className={`font-semibold font-mono ${amountColor}`}>
 					{amountSign}
 					{formattedAmount}
 				</p>
-				<p className="text-xs text-slate-400 font-normal">{account}</p>
+				<p className="text-xs text-slate-400 font-normal">
+					{account.name}
+				</p>
 			</div>
+
 			{hasMenu && (
 				<div className="relative ml-2">
 					<button
