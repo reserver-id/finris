@@ -1,7 +1,7 @@
 "use client";
 
 import Transaction from "RSV/components/Transaction";
-import useUserData from "RSV/hoc/useUserData";
+import useUserData from "RSV/hooks/useUserData";
 
 export default function Transactions() {
 	const { data, isLoading, error } = useUserData();

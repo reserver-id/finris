@@ -1,7 +1,7 @@
 "use client";
 
 import Dashboard from "RSV/components/Dashboard";
-import useUserData from "RSV/hoc/useUserData";
+import useUserData from "RSV/hooks/useUserData";
 
 export default function Home() {
 	const { data, isLoading, error } = useUserData();

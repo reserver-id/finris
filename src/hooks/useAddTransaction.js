@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabaseClient";
 import toast from "react-hot-toast";
 
 export function useAddTransaction() {
@@ -7,14 +6,18 @@ export function useAddTransaction() {
 
 	return useMutation({
 		mutationFn: async (transaction) => {
-			const { data, error } = await supabase
-				.from("transactions")
-				.insert([transaction])
-				.select()
-				.single();
+			const req = await fetch("/api/transaction", {
+				method: "POST",
+				body: JSON.stringify(transaction),
+			});
 
-			if (error) throw error;
-			return data;
+			if (!req.ok) {
+				throw new Error(`Response status: ${response.status}`);
+			}
+
+			const resp = await req.json();
+
+			return resp;
 		},
 		onSuccess: () => {
 			toast.success("Transaksi berhasil ditambahkan");
