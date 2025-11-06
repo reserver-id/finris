@@ -1,30 +1,34 @@
 import { supabase } from "RSV/lib/supabase";
-import { currentUser } from "@clerk/nextjs/server";
+import { getUserId } from "./userService";
+import { getAccountById, updateAccount } from "./accountService";
 
 export async function insertTransaction(transaction) {
-	const clerkUser = await currentUser();
-	if (!clerkUser) throw new Error("User not authenticated");
+  const user_id = await getUserId();
 
-	const { data: user, error: userError } = await supabase
-		.from("users")
-		.select("id")
-		.eq("clerk_id", clerkUser.id)
-		.single();
+  if (!transaction || typeof transaction !== "object") {
+    throw new Error("Invalid transaction payload");
+  }
 
-	if (userError) throw userError;
-	if (!user) throw new Error("User not found");
+  const { account_id, amount, type } = transaction;
+  if (!account_id || !amount || !type) {
+    throw new Error("Missing transaction fields");
+  }
 
-	if (!transaction || typeof transaction !== "object") {
-		throw new Error("Invalid transaction payload");
-	}
+  const { data, error } = await supabase
+    .from("transactions")
+    .insert([{ user_id, ...transaction }])
+    .select()
+    .single();
 
-	const { data, error } = await supabase
-		.from("transactions")
-		.insert([{ user_id: user.id, ...transaction }])
-		.select()
-		.single();
+  if (error) throw error;
 
-	if (error) throw error;
+  const account = await getAccountById(account_id);
+  const oldBalance = account.balance || 0;
 
-	return data;
+  const newBalance =
+    type === "INCOME" ? oldBalance + amount : oldBalance - amount;
+
+  await updateAccount(account_id, { balance: newBalance });
+
+  return data;
 }
