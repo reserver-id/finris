@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -12,8 +12,6 @@ export default function AddTransactionSheet({
   isOpen,
   onClose,
   onSave,
-  accounts = [],
-  categories = [],
   tags = [],
   transactionToEdit = null,
 }) {
@@ -21,6 +19,7 @@ export default function AddTransactionSheet({
   const [date, setDate] = useState(
     transactionToEdit?.date || new Date().toISOString().slice(0, 10),
   );
+  const [type, setType] = useState(transactionToEdit?.type || "");
   const [account, setAccount] = useState(transactionToEdit?.account || "");
   const [description, setDescription] = useState(
     transactionToEdit?.description || "",
@@ -31,6 +30,28 @@ export default function AddTransactionSheet({
     transactionToEdit?.tags || [],
   );
 
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const response = await fetch("/api/categories");
+      const data = await response.json();
+      setCategories(data);
+    }
+    fetchCategories();
+  }, []);
+
+  const [accounts, setAccounts] = useState([]);
+
+  useEffect(() => {
+    async function fetchAccounts() {
+      const response = await fetch("/api/accounts");
+      const data = await response.json();
+      setAccounts(data);
+    }
+    fetchAccounts();
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!date || !account || !amount) {
@@ -38,13 +59,12 @@ export default function AddTransactionSheet({
       return;
     }
     onSave({
-      id: isEditing ? transactionToEdit.id : Date.now().toString(),
-      date,
-      account,
+      account_id: Number(account),
+      category_id: Number(category),
+      transaction_date: date,
+      amount: amount,
+      type,
       description,
-      amount: parseFloat(amount),
-      category,
-      tags: selectedTags,
     });
     onClose();
   };
@@ -90,16 +110,34 @@ export default function AddTransactionSheet({
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Tanggal
-              </label>
-              <Input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full p-3 bg-slate-100 rounded-md border border-slate-200 focus:ring-2 focus:ring-orange-400 focus:outline-0"
-              />
+            <div className="flex gap-3">
+              {/* Kolom kiri - Select Type */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Tipe
+                </label>
+                <Select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="w-full p-3 bg-slate-100 rounded-md border border-slate-200 focus:ring-2 focus:ring-orange-400 focus:outline-0"
+                >
+                  <option value="INCOME">INCOME</option>
+                  <option value="EXPENSE">EXPENSE</option>
+                </Select>
+              </div>
+
+              {/* Kolom kanan - Tanggal */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Tanggal
+                </label>
+                <Input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full p-3 bg-slate-100 rounded-md border border-slate-200 focus:ring-2 focus:ring-orange-400 focus:outline-0"
+                />
+              </div>
             </div>
 
             <div>
@@ -158,8 +196,8 @@ export default function AddTransactionSheet({
               >
                 <option value="">Pilih kategori...</option>
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
                   </option>
                 ))}
               </Select>
