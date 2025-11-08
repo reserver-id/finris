@@ -32,3 +32,24 @@ export async function insertTransaction(transaction) {
 
   return data;
 }
+
+export async function getTransactions() {
+  const user_id = await getUserId();
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      `
+        id, type, amount, description, transaction_date, created_at,
+        account:accounts(name),
+        category:categories(name)
+      `,
+    )
+    .eq("user_id", user_id)
+    .order("created_at", { ascending: false });
+
+  if (error && error.code !== "PGRST116") {
+    throw error;
+  }
+
+  return data;
+}

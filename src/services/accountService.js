@@ -41,8 +41,8 @@ export async function updateAccount(account_id, updates) {
   return data;
 }
 
-export async function createAccount(account) {
-  const user_id = await getUserId();
+export async function createAccount(userId, account) {
+  const user_id = !userId ? await getUserId() : userId;
   const { data, error } = await supabase
     .from("accounts")
     .insert({ ...account, user_id })

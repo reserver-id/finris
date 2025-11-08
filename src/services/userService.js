@@ -1,5 +1,7 @@
 import { supabase } from "RSV/lib/supabase";
 import { currentUser } from "@clerk/nextjs/server";
+import { getTransactions } from "./transactionService";
+import { createDefaultCategories } from "./categoryService";
 
 export async function getCurrenUser() {
   const user = await currentUser();
@@ -21,26 +23,24 @@ export async function getUserId() {
   return user.id;
 }
 
-export async function getOrCreateUser({ clerk_id, email, name }) {
-  const { data: existing, error: existingError } = await supabase
+export async function createUser({ clerk_id, email, name }) {
+  const { data, error } = await supabase
     .from("users")
-    .select(
-      `id, name,
-        accounts(id, name, balance),
-        transactions(
-          id, type, amount, description, transaction_date,
-          account:accounts(name),
-          category:categories(name)
-        )`,
-    )
-    .eq("clerk_id", clerk_id)
+    .insert([{ email, name, clerk_id }])
     .single();
 
-  if (existingError && existingError.code !== "PGRST116") {
-    throw existingError;
-  }
+  if (error) throw error;
 
-  if (existing) return existing;
+  await createAccount(data.id, { name: "Cash", balance: 0 });
+  await createDefaultCategories(data.id);
+}
+
+export async function getOrCreateUser({ clerk_id, email, name }) {
+  const existing = await getTransactions();
+
+  if (existing) {
+    return existing;
+  }
 
   const { data: inserted, error: insertError } = await supabase
     .from("users")
